@@ -1,0 +1,197 @@
+<html>
+  <head>
+    <title>Confirm Order</title>
+    <link rel="stylesheet" href="/bootstrap.css" />
+    <link rel="stylesheet" href="/main.css" />
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+  </head>
+
+  <body>
+    <script>
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/messenger.Extensions.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "Messenger");
+    </script>
+
+    <div class="container-contact100">
+      <div class="wrap-contact100">
+        <!--         <form class="contact100-form validate-form"> -->
+        <div class="clearfix ">
+          <img
+            style="float:left"
+            src="https://cdn.glitch.com/11cdb0eb-be82-41ef-820d-46c73f500ac1%2Fchoplogo.png?v=1579883798548"
+          />
+        </div>
+
+        <div class="wrap-input100 validate-input bg1">
+          <h5 class=" text-center">
+            ChopNowNow Order
+          </h5>
+
+          <p class="m-2 text-center">
+            <b>Click Make Payment to Continue</b>
+          </p>
+
+          <% items.forEach(function(item, i) { %>
+
+          <p class="p-1 text-dark">
+            <%= item[0] %> <br />
+            <span class=""><b><%= item[1] %></b></span>
+          </p>
+
+          <% });%>
+
+          <p class="text-dark">
+            <b>
+              Cart Total: <%= total %> <br /><br />
+              Delivery Fee: <%= district %> <br />
+              Total Due: <%= ctotal %>
+            </b>
+          </p>
+
+          <p class="mt-2">
+            Customer Name: <%= nm %> <br />
+            Delivery Time: <%= slot %> <br />
+            Delivery Address: <%= address %> <br />
+            Transaction ID/Ref: <%= orderid %>
+          </p>
+        </div>
+
+        <% if (ptype == "interswitch"){ %>
+
+        <form
+          action="https://sandbox.interswitchng.com/collections/w/pay"
+          method="POST"
+        >
+ 
+          <input name="product_id" type="hidden" value="1076" />
+          <input name="pay_item_id" type="hidden" value="101" />
+          <input name="currency" type="hidden" value="566" />
+          <input name="site_redirect_url" type="hidden" value="<%= url %>" />
+          <input name="txn_ref" type="hidden" value="<%= pay_ref %>" />
+          <input name="cust_id" type="hidden" value="<%= email %>" />
+          <input name="amount" type="hidden" value="<%= amt %>" />
+          <input name="cust_name" type="hidden" value="<%= nm %>" />
+          <input name="hash" type="hidden" value="<%= hash %>" />
+
+          <div class="container-contact100-form-btn">
+            <input
+              class="contact100-form-btn bgred"
+              type="submit"
+              value="Pay With Interswitch"
+            />
+          </div>
+        </form>
+
+        <% } else if (ptype == "paystack"){ %>
+
+        <input id="oid" type="hidden" name="oid" value="<%= pay_ref %>" />
+        <input type="hidden" id="email" value="<%= email %>" />
+        <input type="hidden" id="ototal" value="<%= amt %>" />
+        <input type="hidden" id="pkey" value="<%= ps_key %>" />
+        <input type="hidden" id="uid" value="<%= uid %>" />
+
+        <button id="pay-btn" class="contact100-form-btn bgred">
+          Pay With Paystack
+        </button>
+
+        <button id="check-btn" class="d-none mt-3 contact100-form-btn bgred">
+          Check With Paystack
+        </button>
+
+        <% } %>
+      </div>
+    </div>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="text/javascript">
+      window.extAsyncInit = function() {
+        // the Messenger Extensions JS SDK is done loading
+        console.log("sdk open");
+
+        var order_id = $("#oid").val();
+        var email = $("#email").val();
+        var total = $("#ototal").val();
+        var pkey = $("#pkey").val();
+        var uid = $("#uid").val();
+
+        function makepayment(key, email, amount, ref) {
+          console.log(
+            "in payment Key: " + key + " TOtal: " + amount + " Email: " + email
+          );
+          var handler = PaystackPop.setup({
+            key: key, // This is your public key only!
+            email: email, // Customers email
+            amount: amount, // The amount charged, I like big money lol
+            ref: ref, // Generate a random reference number and put here",
+            metadata: {
+              // More custom information about the transaction
+              custom_fields: [{}]
+            },
+            callback: function(response) {
+              console.log(
+                "This was the json response reference </br />" +
+                  JSON.stringify(response)
+              );
+              if (response.status == "success") {
+                $.post("/ps-mail", { oid: ref, amount: amount}, function(
+                  result
+                ) {
+                  console.log("Result:"+result);
+                });
+
+                $.post("/broadcast-to-chatfuel/" + uid, function(data) {
+                  MessengerExtensions.requestCloseBrowser(
+                    function success() {
+                      window.close();
+                      console.log("Window will be closed");
+                    },
+                    function error(error) {
+                      console.log("There is an error");
+                      console.log(error);
+                    }
+                  );
+                });
+              }
+            },
+            onClose: function() {
+              // alert("window closed");
+            }
+          });
+          // Payment Request Just Fired
+          handler.openIframe();
+        }
+
+        let check = document.getElementById("check-btn");
+        check.addEventListener("click", function() {
+          alert("Key: " + pkey + " TOtal: " + total + " Email: " + email);
+        });
+
+        let dom = document.getElementById("pay-btn");
+        dom.addEventListener("click", function() {
+          makepayment(pkey, email, total, order_id); // edit this and input your public key .. This is mine, please pay in ony big money lol
+        });
+      };
+    </script>
+  </body>
+</html>

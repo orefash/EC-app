@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Add Menu Items</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+
+<% include ../partials/head %>
+
+</head>
+<body>
+
+
+	<% include ../partials/header %>
+	
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form"  method="POST" action="/insert-items">
+				<span class="contact100-form-title">
+					Add Member Product
+				</span>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Please Type Item name">
+					<span class="label-input100">Product Title *</span>
+					<input class="input100" type="text" name="title" placeholder="Enter Menu Item">
+				</div>
+
+				<div class="wrap-input100 validate-input bg1" data-validate="Please Type Item Price">
+					<span class="label-input100">Product Price *</span>
+					<input class="input100" type="text" name="price" placeholder="Enter Menu Item Price without symbol">
+				</div>
+
+				<div class="wrap-input100  bg1">
+					<span class="label-input100">Image Url</span>
+					<input class="input100" type="text" name="img" placeholder="Enter Image Url">
+				</div>				
+
+				<div class="wrap-input100 input100-select bg1">
+					<span class="label-input100">Group Member *</span>
+					<div>
+						<select class="js-select2" name="category">
+							<option>Please choose</option>
+
+							<% cats.forEach(function(c, i) { %>
+								<option value="<%= c.cid %>"> <%= c.title %> </option>
+							  
+								
+							<% });%>
+
+						</select>
+						<div class="dropDownSelect2"></div>
+					</div>
+				</div>
+
+				
+				<div class="wrap-input100  bg0 ">
+					<span class="label-input100">Description</span>
+					<textarea class="input100" name="description" placeholder="Your description here..."></textarea>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button class="contact100-form-btn">
+						<span>
+							Submit
+							<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+						</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<% include ../partials/foot %>
+
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+
+
+
+</body>
+</html>

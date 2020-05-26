@@ -1,0 +1,200 @@
+<html>
+  <head>
+    <title>Checkout</title>
+    <link rel="stylesheet" href="/bootstrap.css" />
+    <!--     <link rel="stylesheet" href="/fa.css" />
+    <link rel="stylesheet" href="/material-font.css" /> -->
+    <link rel="stylesheet" href="/main.css" />
+    <!--     <link rel="stylesheet" href="/util.css" /> -->
+    <!--     <link rel="stylesheet" href="/style.css" /> -->
+  </head>
+
+  <body>
+    
+
+    <div class="container-contact100">
+      <div class="wrap-contact100">
+        <form id="form" class="contact100-form validate-form" method="POST" action="/payment">
+          <div class="clearfix ">
+            
+            <img style="float:left" src="https://cdn.glitch.com/11cdb0eb-be82-41ef-820d-46c73f500ac1%2Fchoplogo.png?v=1579883798548"/>
+          
+            
+          </div>
+          
+          
+          <div
+            class="wrap-input100 validate-input bg0"
+          >
+            
+<!--             <h3 class="red text-center">
+            Checkout 
+          </h3> -->
+            
+            <p class="m-2 text-center">
+              Please review the content of your cart before you checkout
+            </p>
+<!--             <p>
+              <b>CART ITEMS</b>
+            </p> -->
+            
+            
+            <% items.forEach(function(item, i) { %>
+              
+              <p class="p-2 bg0">
+              <%= i+1 %>. <%= item.title %> <br>
+              <span class="red"><b><%= item.price %> * <%= item.quantity %></b></span>
+            </p>
+              
+            <% });%>
+           
+            <h5 class="mt-2">
+              Total Due: <%= total %>
+            </h5>
+          </div>
+              
+              
+              <div class="coupon">
+                
+                <div
+            class="wrap-input60 validate-input bg1"
+          >
+            <span class="label-input100">COUPON CODE</span>
+            <input
+              class="input100"
+              type="text"
+              name="coupon"
+              placeholder="Enter coupon code to get discount"
+            />
+          </div>
+                
+                <div class="coupon-msg">
+<!--                   <p>
+                    The coupon is
+                  </p> -->
+                </div>
+                
+                
+              </div>
+                  
+                  
+              
+          
+          
+
+          <div class="wrap-input100 input100-select bg1">
+            <span class="label-input100">Select Time Slot </span>
+            <div>
+              <select class="form-control" name="slot">
+<!--                 <option>--Time Slots--</option> -->
+                
+                 <% timeslots.forEach(function(slot, i) { %>
+              <option value="<%= slot %>"> <%= slot %> </option>
+            
+              
+            <% });%>
+             
+              </select>
+              <div class="dropDownSelect2"></div>
+            </div>
+          </div>
+
+          <div class="wrap-input100 input100-select bg1">
+            <span class="label-input100">Select Delivery District </span>
+            <div>
+              <select class="form-control" name="district">
+<!--                 <option>--Delivery Districts--</option> -->
+                
+                <% for(var key in districts) {%>
+              <option value="<%= key %>"> <%= key %> </option>
+              
+            <% }%>
+                
+               
+              </select>
+              <div class="dropDownSelect2"></div>
+            </div>
+          </div>
+
+          
+
+          <div
+            class="wrap-input100 validate-input bg0 rs1-alert-validate"
+            data-validate="Please Type Your Message"
+          >
+            <span class="label-input100">Any extra info/request?</span>
+            <textarea
+              class="input100"
+              name="info"
+              placeholder=""
+            ></textarea>
+          </div>
+              
+          <div  class=" wrap-input100 input100-select bg1">
+            <span class="label-input100">Select Payment Option</span>
+            <div>
+              <select class="form-control" name="payment">
+                <option value="interswitch">Pay with ATM Card / Debit Card / Credit Card (Interswitch)</option>
+                <option value="paystack">Pay with ATM Card / Debit Card / Credit Card (Paystack)</option>
+<!--                 <option value="ussd">Pay with USSD</option> -->
+              </select>
+              <div class="dropDownSelect2"></div>
+            </div>
+          </div>
+              
+                            
+             <input type="hidden" name="oid" value="<%= orderid %>">
+
+          <div class="container-contact100-form-btn">
+            <input class="contact100-form-btn bgred" type="submit" value="Confirm Order"/>
+
+          </div>
+              
+        </form>
+      </div>
+    </div>
+            
+    <script >
+            alert("hello");
+    </script>
+
+    <script src="/select.js"></script>
+
+    <script type="75e28b40c70521418b19bd9d-text/javascript">
+      $(".js-select2").each(function(){
+      	$(this).select2({
+      		minimumResultsForSearch: 20,
+      		dropdownParent: $(this).next('.dropDownSelect2')
+      	});
+
+
+      	$(".js-select2").each(function(){
+      		$(this).on('select2:close', function (e){
+      			if($(this).val() == "Please chooses") {
+      				$('.js-show-service').slideUp();
+      			}
+      			else {
+      				$('.js-show-service').slideUp();
+      				$('.js-show-service').slideDown();
+      			}
+      		});
+      	});
+      })
+    </script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+            
+          
+  </body>
+</html>
+

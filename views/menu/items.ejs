@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+   <% include ../partials/head %>
+
+
+
+    <title>View Products</title>
+  </head>
+  <body>
+
+    <% include ../partials/header %>
+
+    <div class="container bgg">
+
+        <div class="row bg1">
+            <div class="col-12">
+    
+                <table class="table table-image">
+                    <thead>
+                      <tr>
+                        <th scope="col">S/N</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                   
+                      <% cats.forEach(function(c, i) { %>
+                        
+                        <tr>
+                          <th scope="row"><%= i+1 %></th>
+                          <td class="w-25">
+                              <img src="<%= c.img_url %>" class="img-fluid img-thumbnail" alt="Sheep">
+                          </td>
+                          <td><%= c.title %></td>
+                          <td><%= c.category %></td>
+                          <td><%= c.desc %></td>
+                          <td><%= c.price %></td>
+                          <td>
+                            <div>
+                                <button type="button"  data-toggle="modal" data-target="#editItem" data-cat="<%= c.category %>" data-price="<%= c.price %>" data-img="<%= c.img_url %>" data-desc="<%= c.desc %>" data-title="<%= c.title %>" data-id="<%= c._id %>" class="btn btn-primary btn-sm btn-block mt-1">Edit</button>
+                          
+                                <!-- <a href="" class="btn btn-danger mt-1 btn-sm btn-block">Delete</a> -->
+                                <button type="button"  data-toggle="modal" data-target="#delItem" data-id="<%= c._id %>" class="btn btn-danger btn-sm btn-block mt-1">Delete</button>
+                            </div>
+
+                          </td>
+                        </tr>
+                        
+                        
+                      <% });%>
+                     
+                    </tbody>
+                  </table>  
+    
+    
+    
+            </div>
+    
+        </div>
+    
+
+
+    </div>
+
+    
+
+    <div class="modal fade" id="delItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              Are you sure you want to delete this Item?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button id="del-item-btn" type="button" class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="modal fade" id="editItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit Item</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              
+              <form id="i-form" method="POST" action="/update-item">
+      
+                
+                <input type="hidden" name="id"  id="tid">
+      
+                <div class="form-group">
+                  <label  class="col-form-label">Item:</label>
+                  <input type="text" name="title" class="form-control" id="ititle">
+                </div>
+                <div class="form-group">
+                  <label  class="col-form-label">Category:</label>
+                  <input type="text" name="category" class="form-control" id="icat" disabled>
+                </div>
+                <div class="form-group">
+                  <label  class="col-form-label">Price:</label>
+                  <input type="number" name="price" class="form-control" id="iprice">
+                </div>
+                <div class="form-group">
+                  <label  class="col-form-label">Image Url:</label>
+                  <input type="text" name="image" class="form-control" id="image">
+                </div>
+                <div class="form-group">
+                  <label  class="col-form-label">Description:</label>
+                  <textarea name="desc" class="form-control" id="idesc"></textarea>
+                </div>
+              </form>
+      
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button id="edit-btn" type="button" class="btn btn-danger">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+
+    
+    <% include ../partials/foot %>
+
+<!--===============================================================================================-->
+<script src="js/action.js"></script>
+
+     </body>
+</html>
