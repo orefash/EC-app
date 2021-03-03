@@ -14,7 +14,7 @@
     "sqlite3": "^4.0.0",
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "chatfuel-broadcast": "^1.1.0",
     "ejs": "^2.5.5",
     "moment": "^2.14.1",
